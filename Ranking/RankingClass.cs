@@ -25,7 +25,7 @@ namespace Ranking
 
         public Player GetPlayerAtRank(int rank)
         {
-            return ranking.ElementAt(rank - 1);
+            return ranking.ElementAt(rank - 2);
         }
 
         public void AddPlayer(Player p)
@@ -35,6 +35,20 @@ namespace Ranking
             else
                 ranking.Add(p);
             ranking.Sort();
+        }
+
+        public Player GetPlayer(String name)
+        {
+            Player p = ranking.Find(x => x.Name == name);
+            if (p is null || p.Name.Equals(""))
+                throw new ArgumentException("Can't find player");
+            else
+                return p;
+        }
+
+        public void removePlayer(Player p)
+        {
+            ranking.Remove(p);
         }
 
         public class Player : IComparable
