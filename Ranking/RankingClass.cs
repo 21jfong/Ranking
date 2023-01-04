@@ -25,12 +25,16 @@ namespace Ranking
 
         public Player GetPlayerAtRank(int rank)
         {
-            return ranking.ElementAt(rank - 2);
+            if (ranking.Any())
+                return ranking.ElementAt(rank - 3);
+            else
+                throw new ArgumentException();
         }
 
         public void AddPlayer(Player p)
         {
-            if (ranking.Contains(p))
+            Player player = ranking.Find(x => x.Name == p.Name);
+            if (player is not null)
                 throw new ArgumentException();
             else
                 ranking.Add(p);
