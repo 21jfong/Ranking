@@ -23,19 +23,22 @@
                 <Entry x:Name="lossesContentEntry" HeightRequest="5"/>
 
                 <Button x:Name="ConfirmButton" Text="Enter" Clicked ="OnConfirmButtonClicked"/>
-
-
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout Spacing="60">
                 <Label Text="Edit Player (Search by Name): "/>
                 <Entry x:Name="EditContentEntry" HeightRequest="5"/>
 
                 <Button x:Name="EditButton" Text="Search" Clicked ="OnEditButtonClicked"/>
 
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
                 <Label Text="View Player (Search by Name): "/>
                 <Entry x:Name="ViewPlayerEntry" HeightRequest="5"/>
 
                 <Button x:Name="ViewButton" Text="Search" Clicked ="OnViewButtonClicked"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Button x:Name="RosterButton" Text="View Roster" Clicked ="OnRosterButtonClicked"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

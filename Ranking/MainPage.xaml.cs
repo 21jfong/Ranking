@@ -39,7 +39,7 @@ public partial class MainPage : ContentPage
 
     private void DisplayPlayers(RankingClass players)
     {
-        for (int i = 2; i < vertLayout.Count; i++)
+        for (int i = 3; i < vertLayout.Count; i++)
         {
             if (vertLayout[i].GetType().Equals(typeof(Label)))
             {
@@ -85,29 +85,30 @@ public partial class MainPage : ContentPage
             if (editAction.Equals("Delete Player"))
             {
                 ranking.removePlayer(p);
+                vertLayout.RemoveAt(vertLayout.Count - 1);
             }
             if (editAction.Equals("Description"))
             {
                 string desc = await DisplayPromptAsync("Description", "Description");
-                if (!p.Name.Equals(""))
+                if (desc is not null && !p.Name.Equals(""))
                     p.Description = desc;
             }
             if (editAction.Equals("Name"))
             {
                 string name = await DisplayPromptAsync("Name", "Name");
-                if (!p.Name.Equals(""))
+                if (name is not null && !p.Name.Equals(""))
                     p.Name = name;
             }
             if (editAction.Equals("Wins"))
             {
                 string wins = await DisplayPromptAsync("Wins", "Wins");
-                if (!p.Wins.Equals(""))
+                if (wins is not null && !p.Wins.Equals(""))
                     p.Wins = int.Parse(wins);
             }
             if (editAction.Equals("Losses"))
             {
                 string losses = await DisplayPromptAsync("Losses", "Losses");
-                if (!p.Losses.Equals(""))
+                if (losses is not null && !p.Losses.Equals(""))
                     p.Losses = int.Parse(losses);
             }
 
@@ -117,6 +118,11 @@ public partial class MainPage : ContentPage
     }
 
     private void OnViewButtonClicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private void OnRosterButtonClicked(object sender, EventArgs e)
     {
 
     }
