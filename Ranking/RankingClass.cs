@@ -24,11 +24,25 @@ namespace Ranking
             }
         }
 
+        public IEnumerable<Player> GetAllPlayersByPos()
+        {
+            for (int i = 0; i < ranking.Count; i++)
+            {
+                Player p = ranking.Find(x => x.Position == i);
+                while (p is null)
+                {
+                    i++;
+                    p = ranking.Find(x => x.Position == i);
+                }
+                yield return p;
+            }
+        }
+
         public Player GetPlayerAtRank(int rank)
         {
             ranking.Sort();
             if (ranking.Any())
-                return ranking.ElementAt(rank - 3);
+                return ranking.ElementAt(rank - 4);
             else
                 throw new ArgumentException();
         }

@@ -65,7 +65,7 @@ public partial class MainPage : ContentPage
 
     private void DisplayPlayers(RankingClass players)
     {
-        for (int i = 3; i < vertLayout.Count; i++)
+        for (int i = 4; i < vertLayout.Count; i++)
         {
             if (vertLayout[i].GetType().Equals(typeof(Label)))
             {
@@ -113,49 +113,56 @@ public partial class MainPage : ContentPage
         else
         {
             editAction = await DisplayActionSheet("Edit " + p.Name + " (Pick an Option)", "Cancel", "Delete Player",
-                            "Name",
-                            "Description",
-                            "Wins",
-                            "Losses",
-                            "Position");
+                "Name",
+                "Description",
+                "Wins",
+                "Losses",
+                "Position");
         }
 
         if (editAction is not null)
         {
-            if (editAction.Equals("Delete Player"))
+            try
             {
-                ranking.removePlayer(p);
-                vertLayout.RemoveAt(vertLayout.Count - 1);
+                if (editAction.Equals("Delete Player"))
+                {
+                    ranking.removePlayer(p);
+                    vertLayout.RemoveAt(vertLayout.Count - 1);
+                }
+                if (editAction.Equals("Description"))
+                {
+                    string desc = await DisplayPromptAsync("Description", "Description");
+                    if (desc is not null && !p.Name.Equals(""))
+                        p.Description = desc;
+                }
+                if (editAction.Equals("Name"))
+                {
+                    string name = await DisplayPromptAsync("Name", "Name");
+                    if (name is not null && !p.Name.Equals(""))
+                        p.Name = name;
+                }
+                if (editAction.Equals("Wins"))
+                {
+                    string wins = await DisplayPromptAsync("Wins", "Wins");
+                    if (wins is not null && !p.Wins.Equals(""))
+                        p.Wins = int.Parse(wins);
+                }
+                if (editAction.Equals("Losses"))
+                {
+                    string losses = await DisplayPromptAsync("Losses", "Losses");
+                    if (losses is not null && !p.Losses.Equals(""))
+                        p.Losses = int.Parse(losses);
+                }
+                if (editAction.Equals("Position"))
+                {
+                    string position = await DisplayPromptAsync("Position", "Position");
+                    if (position is not null && !p.Position.Equals(""))
+                        p.Position = int.Parse(position);
+                }
             }
-            if (editAction.Equals("Description"))
+            catch
             {
-                string desc = await DisplayPromptAsync("Description", "Description");
-                if (desc is not null && !p.Name.Equals(""))
-                    p.Description = desc;
-            }
-            if (editAction.Equals("Name"))
-            {
-                string name = await DisplayPromptAsync("Name", "Name");
-                if (name is not null && !p.Name.Equals(""))
-                    p.Name = name;
-            }
-            if (editAction.Equals("Wins"))
-            {
-                string wins = await DisplayPromptAsync("Wins", "Wins");
-                if (wins is not null && !p.Wins.Equals(""))
-                    p.Wins = int.Parse(wins);
-            }
-            if (editAction.Equals("Losses"))
-            {
-                string losses = await DisplayPromptAsync("Losses", "Losses");
-                if (losses is not null && !p.Losses.Equals(""))
-                    p.Losses = int.Parse(losses);
-            }
-            if (editAction.Equals("Position"))
-            {
-                string position = await DisplayPromptAsync("Position", "Position");
-                if (position is not null && !p.Position.Equals(""))
-                    p.Position = int.Parse(position);
+                await DisplayAlert("Edit Error", "Please check value and try again.", "Ok");
             }
 
             DisplayPlayers(ranking);
@@ -203,8 +210,15 @@ public partial class MainPage : ContentPage
         int pos = 1;
         foreach (Player p in ranking.GetAllPlayers())
         {
-            sb.Append(pos.ToString() + " " + p.Name + " Wins: " + p.Wins + " Losses: " + p.Losses + "\n");
-            pos++;
+            if (ranking.IsPosEnabled)
+            {
+                sb.Append("Position " + p.Position.ToString() + " " + p.Name + "\n\t\t Wins: " + p.Wins + " Losses: " + p.Losses + "\n");
+            }
+            else
+            {
+                sb.Append(pos.ToString() + " " + p.Name + "\n\t\t Wins: " + p.Wins + " Losses: " + p.Losses + "\n");
+                pos++;
+            }
         }
         DisplayAlert("Roster", sb.ToString(), "Ok");
     }
