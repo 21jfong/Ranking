@@ -9,6 +9,7 @@ namespace Ranking
     public class RankingClass
     {
         private readonly List<Player> ranking;
+        public bool IsPosEnabled { get; set; }
 
         public RankingClass()
         {
@@ -25,6 +26,7 @@ namespace Ranking
 
         public Player GetPlayerAtRank(int rank)
         {
+            ranking.Sort();
             if (ranking.Any())
                 return ranking.ElementAt(rank - 3);
             else
@@ -38,7 +40,6 @@ namespace Ranking
                 throw new ArgumentException();
             else
                 ranking.Add(p);
-            ranking.Sort();
         }
 
         public Player GetPlayer(String name)
@@ -61,6 +62,7 @@ namespace Ranking
             public string Description { get; set; }
             public int Wins { get; set; }
             public int Losses { get; set; }
+            public int Position { get; set; }
 
             public Player()
             {
@@ -75,6 +77,15 @@ namespace Ranking
                 Description = description;
                 Wins = wins;
                 Losses = losses;
+            }
+
+            public Player(string name, string description, int wins, int losses, int pos)
+            {
+                Name = name;
+                Description = description;
+                Wins = wins;
+                Losses = losses;
+                Position = pos;
             }
 
             public int CompareTo(Object obj)
