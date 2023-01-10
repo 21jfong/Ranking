@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,14 +7,62 @@ using System.Threading.Tasks;
 
 namespace Ranking
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class RankingClass
     {
-        private readonly List<Player> ranking;
+        private List<Player> ranking;
+        [JsonProperty(PropertyName = "Ranking")]
+        private Dictionary<string, Player> playerDictionary;
+        [JsonProperty]
         public bool IsPosEnabled { get; set; }
+        public bool Changed { get; set; }
+        [JsonProperty]
+        public int Count { get; set; }
 
         public RankingClass()
         {
             ranking = new();
+            playerDictionary = new();
+            IsPosEnabled = false;
+            Changed = false;
+            Count = 0;
+        }
+
+        public RankingClass(string filePath)
+        {
+            ranking = new();
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.MissingMemberHandling = MissingMemberHandling.Error;
+
+            // import the given spreadsheet and make sure it is correct
+            try
+            {
+                string s = File.ReadAllText(filePath);
+                RankingClass importedR = JsonConvert.DeserializeObject<RankingClass>(s, settings);
+
+                if (importedR == null)
+                    throw new ArgumentException("unknown path");
+
+                IsPosEnabled = importedR.IsPosEnabled;
+                playerDictionary = importedR.playerDictionary;
+                Count = importedR.Count;
+            }
+            catch
+            {
+                throw new ArgumentException("failure to open");
+            }
+
+            ranking = DictToList();
+        }
+
+        private List<Player> DictToList()
+        {
+            List<Player> p = new();
+
+            foreach (Player player in playerDictionary.Values)
+                p.Add(player);
+            return p;
         }
 
         public IEnumerable<Player> GetAllPlayers()
@@ -26,15 +75,22 @@ namespace Ranking
 
         public IEnumerable<Player> GetAllPlayersByPos()
         {
-            for (int i = 0; i < ranking.Count; i++)
+            int pos = 0;
+            int pCount = 0;
+            while (pCount < ranking.Count)
             {
-                Player p = ranking.Find(x => x.Position == i);
-                while (p is null)
+                List<Player> pList = ranking.FindAll(x => x.Position == pos);
+                while (!pList.Any())
                 {
-                    i++;
-                    p = ranking.Find(x => x.Position == i);
+                    pos++;
+                    pList = ranking.FindAll(x => x.Position == pos);
                 }
-                yield return p;
+                foreach (Player player in pList)
+                {
+                    yield return player;
+                    pCount++;
+                }
+                pos++;
             }
         }
 
@@ -42,7 +98,7 @@ namespace Ranking
         {
             ranking.Sort();
             if (ranking.Any())
-                return ranking.ElementAt(rank - 4);
+                return ranking.ElementAt(rank);
             else
                 throw new ArgumentException();
         }
@@ -53,7 +109,11 @@ namespace Ranking
             if (player is not null)
                 throw new ArgumentException();
             else
+            {
                 ranking.Add(p);
+                Count = ranking.Count;
+                playerDictionary.Add(p.Name, p);
+            }
         }
 
         public Player GetPlayer(String name)
@@ -68,8 +128,31 @@ namespace Ranking
         public void removePlayer(Player p)
         {
             ranking.Remove(p);
+            playerDictionary.Remove(p.Name);
+            Count = ranking.Count;
         }
 
+        public void clearPlayers()
+        {
+            ranking.Clear();
+            playerDictionary.Clear();
+            Count = ranking.Count;
+        }
+
+        public void Save(string filename)
+        {
+            try
+            {
+                File.WriteAllText(filename, JsonConvert.SerializeObject(this));
+                Changed = false;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("File not found");
+            }
+        }
+
+        [JsonObject]
         public class Player : IComparable
         {
             public string Name { get; set; }

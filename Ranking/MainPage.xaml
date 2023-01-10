@@ -6,59 +6,88 @@
         <MenuBarItem Text="File">
             <MenuFlyoutItem Text="Enable Player Positions" Clicked="PosClicked"/>
             <MenuFlyoutItem Text="Disable Player Positions" Clicked="DisPosClicked"/>
+            <MenuFlyoutItem Text="Save As" Clicked="SaveAsClicked"/>
+            <MenuFlyoutItem Text="Save" Clicked="SaveClicked"/>
+            <MenuFlyoutItem Text="Open" Clicked="OpenClicked"/>
         </MenuBarItem>
         <MenuBarItem Text="Help">
+            <MenuFlyoutItem Text="Enable/Disable the setting for Player positions" Clicked="PosHelpClicked"/>
+            <MenuFlyoutItem Text="Saving" Clicked="SaveHelpClicked"/>
+            <MenuFlyoutItem Text="Opening" Clicked="OpenHelpClicked"/>
+            <MenuFlyoutItem Text="Deleting a player" Clicked="DeleteHelpClicked"/>
+
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
-    <ScrollView HorizontalScrollBarVisibility="Always" IsEnabled="True" VerticalScrollBarVisibility="Always">
-        <Border>
-            <VerticalStackLayout x:Name="vertLayout" Spacing="25">
-                <Border>
-                    <HorizontalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+    <ScrollView>
+        <VerticalStackLayout Spacing="30" HorizontalOptions="Center">
+            <VerticalStackLayout Spacing="25">
 
-                        <Label Text="Player Name: "/>
-                        <Entry x:Name="nameContentEntry" HeightRequest="5"/>
+                <HorizontalStackLayout Spacing="25">
+                    <Button x:Name="RosterButton" Text="View Roster" Clicked ="OnRosterButtonClicked"/>
+                    <Button x:Name="ClearPlayers" Text="Clear All Players" Clicked ="OnClearPlayersButtonClicked"/>
+                    <Label x:Name="HasBeenSavedLabel" Text="No Unsaved Changes"/>
+                </HorizontalStackLayout>
 
-                        <Label Text="Player Description: "/>
-                        <Entry x:Name="descriptionContentEntry" HeightRequest="5"/>
 
-                        <Label Text="Player Wins: "/>
-                        <Entry x:Name="winsContentEntry" HeightRequest="5"/>
+                <VerticalStackLayout>
+                    <Label Text="Player Entry: " FontSize="Medium"/>
+                    <Border Padding="0,10">
+                        <VerticalStackLayout Spacing="25">
+                            <HorizontalStackLayout Spacing="25" Padding="30,0">
 
-                        <Label Text="Player Losses: "/>
-                        <Entry x:Name="lossesContentEntry" HeightRequest="5"/>
+                                <Label Text="Player Name: "/>
+                                <Entry x:Name="nameContentEntry" HeightRequest="5"/>
 
-                        <Label x:Name="PosLabel" Text="Player Position: " IsVisible="False"/>
-                        <Entry x:Name="PositionContentEntry" HeightRequest="5" IsEnabled="False" IsVisible="False"/>
+                                <Label Text="Player Description: "/>
+                                <Entry x:Name="descriptionContentEntry" HeightRequest="5"/>
 
-                        <Button x:Name="ConfirmButton" Text="Enter" Clicked ="OnConfirmButtonClicked"/>
+                                <Label Text="Player Wins: "/>
+                                <Entry x:Name="winsContentEntry" HeightRequest="5"/>
 
-                    </HorizontalStackLayout>
-                </Border>
+                                <Label Text="Player Losses: "/>
+                                <Entry x:Name="lossesContentEntry" HeightRequest="5"/>
 
-                <Border>
-                    <HorizontalStackLayout Spacing="25" Padding="30,0">
-                        <Label Text="Edit Player (Search by Name): "/>
-                        <Entry x:Name="EditContentEntry" HeightRequest="5"/>
-                        <Button x:Name="EditButton" Text="Search" Clicked ="OnEditButtonClicked"/>
+                                <Label x:Name="PosLabel" Text="Player Position: " IsVisible="False"/>
+                                <Entry x:Name="PositionContentEntry" HeightRequest="5" IsEnabled="False" IsVisible="False"/>
 
-                        <Label Text=" " WidthRequest="120"/>
+                                <Button x:Name="ConfirmButton" Text="Enter" Clicked ="OnConfirmButtonClicked"/>
 
-                        <Label Text="View Player (Search by Name): "/>
-                        <Entry x:Name="ViewPlayerEntry" HeightRequest="5"/>
-                        <Button x:Name="ViewButton" Text="Search" Clicked ="OnViewButtonClicked"/>
-                    </HorizontalStackLayout>
-                </Border>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
 
-                <Border>
-                    <HorizontalStackLayout Spacing="25" Padding="30,0">
+                <VerticalStackLayout>
+                    <Label Text="Player Options: " FontSize="Medium"/>
+                    <Border Padding="0,10">
+                        <HorizontalStackLayout Spacing="25" Padding="30,0">
+                            <Label Text="Edit Player (Search by Name): "/>
+                            <Entry x:Name="EditContentEntry" HeightRequest="5"/>
+                            <Button x:Name="EditButton" Text="Search" Clicked ="OnEditButtonClicked"/>
 
-                        <Button x:Name="RosterButton" Text="View Roster" Clicked ="OnRosterButtonClicked"/>
-                    </HorizontalStackLayout>
+                            <Label Text=" " WidthRequest="70"/>
+
+                            <Label Text="View Player (Search by Name): "/>
+                            <Entry x:Name="ViewPlayerEntry" HeightRequest="5"/>
+                            <Button x:Name="ViewButton" Text="Search" Clicked ="OnViewButtonClicked"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+
+                <Label Text="Players ranked by wins: " FontSize="Medium"/>
+                <HorizontalStackLayout>
+                    <Button x:Name="AddWinsButton" Text="Add 1 Win to:" Clicked ="AddWinsButtonClicked"/>
+                    <Entry x:Name="AddWinsEntry" HeightRequest="5"/>
+                </HorizontalStackLayout>
+                <Border HorizontalOptions="Start" Padding="10,10">
+                    <VerticalStackLayout x:Name="vertLayout"/>
                 </Border>
             </VerticalStackLayout>
-        </Border>
+        </VerticalStackLayout>
     </ScrollView>
 
 </ContentPage>
